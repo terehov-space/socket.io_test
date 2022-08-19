@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Пример socket.io</title>
+    <style>
+        #form {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+        }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+<div id="chat">
+
+</div>
+<form id="form">
+    <input id="message" type="text"/>
+    <button>send</button>
+</form>
+
+
+<script>
+    let socket = io();
+
+    const form = document.getElementById('form');
+    const messageBox = document.getElementById('message');
+    const messages = document.getElementById('chat');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (messageBox.value) {
+            socket.emit('newMessage', messageBox.value);
+            messageBox.value = '';
+        }
+    });
+
+    socket.on('incomingMessage', function (msg) {
+        const item = document.createElement('div');
+        item.textContent = msg;
+        messages.appendChild(item);
+    });
+</script>
+</body>
+</html>
